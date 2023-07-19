@@ -1,61 +1,48 @@
 import java.util.Random;
-import java.util.Scanner;
 
 public class Casino {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
+        if (args.length != 1) {
+            System.out.println("Usage: java Casino <argent_initial>");
+            System.exit(1);
+        }
 
-        int numRandom = 0;
         int gains = 0;
         int miseUtilisateur = 0;
         int nbrUtilisateur = 0;
 
-        System.out.println("Bienvenue au casino ! Misez sur un nombre entre 0 et 49. Si vous tombez sur le bon nombre, vous gagnez 3 fois votre mise. Sinon, vous perdez votre mise.");
-
-        while (true) {
-            try {
-                System.out.print("Avec combien d'argent êtes-vous rentré ? ");
-                gains = Integer.parseInt(scanner.nextLine());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Vous devez entrer un nombre entier !");
-            }
+        try {
+            gains = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            System.out.println("Vous devez entrer un nombre entier pour l'argent initial !");
+            System.exit(1);
         }
 
+        Random random = new Random();
+
+        System.out.println("Bienvenue au casino ! Misez sur un nombre entre 0 et 49. Si vous tombez sur le bon nombre, vous gagnez 3 fois votre mise. Sinon, vous perdez votre mise.");
+
         while (gains > 0) {
-            while (true) {
-                try {
-                    System.out.print("Combien voulez-vous miser ? ");
-                    miseUtilisateur = Integer.parseInt(scanner.nextLine());
-                    if (miseUtilisateur > gains) {
-                        System.out.println("Vous ne pouvez pas miser plus que ce que vous avez (" + gains + ") !");
-                        continue;
-                    }
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("Vous devez entrer un nombre entier !");
-                }
+            System.out.print("Combien voulez-vous miser ? ");
+            miseUtilisateur = Integer.parseInt(System.console().readLine());
+
+            if (miseUtilisateur > gains) {
+                System.out.println("Vous ne pouvez pas miser plus que ce que vous avez (" + gains + ") !");
+                continue;
             }
 
-            while (true) {
-                try {
-                    System.out.print("Sur quel nombre voulez-vous miser ? ");
-                    nbrUtilisateur = Integer.parseInt(scanner.nextLine());
-                    if (nbrUtilisateur < 0 || nbrUtilisateur > 49) {
-                        System.out.println("Vous devez entrer un nombre entre 0 et 49 !");
-                        continue;
-                    }
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("Vous devez entrer un nombre entier !");
-                }
+            System.out.print("Sur quel nombre voulez-vous miser ? ");
+            nbrUtilisateur = Integer.parseInt(System.console().readLine());
+
+            if (nbrUtilisateur < 0 || nbrUtilisateur > 49) {
+                System.out.println("Vous devez entrer un nombre entre 0 et 49 !");
+                continue;
             }
 
             System.out.println("La roulette tourne...");
 
             // Génération du nombre aléatoire
-            numRandom = random.nextInt(50);
+            int numRandom = random.nextInt(50);
 
             System.out.println("Le numéro gagnant est le " + numRandom);
 
@@ -74,14 +61,12 @@ public class Casino {
             System.out.println("Vous avez maintenant " + gains + "€");
 
             System.out.print("Voulez-vous rejouer ? (o/n) ");
-            String continuePlaying = scanner.nextLine();
+            String continuePlaying = System.console().readLine();
             if (continuePlaying.equalsIgnoreCase("n")) {
                 System.out.println("Vous partez avec " + gains + "€");
                 System.out.println("Au revoir !");
                 break;
             }
         }
-
-        scanner.close();
     }
 }
